@@ -14,7 +14,7 @@ class Dashboard extends Component {
         <h3>Battleship</h3>
         <Grid grid={this.props.grid} />
       </div>
-    )
+    );
   }
 }
 
