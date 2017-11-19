@@ -5,24 +5,16 @@ import { createStore, applyMiddleware } from 'redux';
 import { browserHistory } from 'react-router';
 import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
-import { AUTH_USER } from './actions/types';
 import reducers from './reducers';
 
 
-const createStoreWithMiddleware = applyMiddleware(reduxThunk)(createStore);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStoreWithMiddleware(reducers);
-
-const token = localStorage.getItem('token');
-
-// If we have a token consider user to be signed in
-if (token) {
-  store.dispatch({ type: AUTH_USER });
-}
+const store = createStore(reducers, composeEnhancers(
+  applyMiddleware(reduxThunk)
+));
 
 
-// const store = configureStore();
-// const history = syncHistoryWithStore(browserHistory, store);
 
 render(
   <AppContainer>

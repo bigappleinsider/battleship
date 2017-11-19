@@ -4,13 +4,12 @@
   "description": "A boilerplate for playing around with react, redux and react-router with the help of webpack.",
   "main": "index.js",
   "scripts": {
-    "test": "",
+    "test": "jest",
     "heroku-postbuild": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
     "start": "node app",
     "dev": "node server-dev",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
     "eslint": "eslint .",
-    "test": "jest",
     "test:watch": "npm test -- --watch"
   },
   "keywords": [
@@ -42,6 +41,7 @@
     "json-loader": "^0.5.4",
     "node-sass": "^3.7.0",
     "postcss-loader": "^0.9.1",
+    "prop-types": "^15.6.0",
     "query-string": "^4.3.2",
     "react": "^15.0.2",
     "react-addons-test-utils": "^15.0.2",

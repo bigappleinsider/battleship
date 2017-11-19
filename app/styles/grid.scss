@@ -1,0 +1,14 @@
+.row {
+  display: flex;
+  .cell {
+    border: 1px solid grey;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    min-width: 30px;
+    min-height: 30px;
+  }
+}
+.header{
+  font-weight: bold;
+}

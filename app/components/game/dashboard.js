@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
-
 import * as actions from '../../actions';
+
+import Grid from './grid';
 
 class Dashboard extends Component {
   componentWillMount() {
     this.props.fetchGrid();
   }
-  renderGrid() {
-
-  }
   render() {
     return (
       <div>
+        <h3>Battleship</h3>
+        <Grid grid={this.props.grid} />
       </div>
     )
   }

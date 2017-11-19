@@ -7,7 +7,7 @@ import { INIT_GRID } from './types';
 //the following should be generated on the server for multiplayer/multidevice game
 const SYMBOLS = {
   "carrier": "c",
-  "battleship": "b".
+  "battleship": "b",
   "cruiser": "c",
   "submarine": "s",
   "destroyer": "d",
@@ -28,8 +28,8 @@ export function fetchGrid() {
       grid[i].push('e');
     }
   }
-  SHIPS.forEach(ship => {
-    const { ship, positions } = ship;
+  SHIPS.forEach(shipItem => {
+    const { ship, positions } = shipItem;
     positions.forEach(cords => {
       grid[cords[0]][cords[1]] = ship;
     });
@@ -37,5 +37,5 @@ export function fetchGrid() {
   return {
     type: INIT_GRID,
     payload: grid
-  }
+  };
 };
