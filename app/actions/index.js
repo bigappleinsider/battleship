@@ -22,10 +22,13 @@ const SHIPS = [
 ];
 export function fetchGrid() {
   const grid = [];
+  const userGrid = [];
   for (let i = 0; i < 10; i++) {
     grid[i] = [];
+    userGrid = [];
     for (let j = 0; j < 10; j++) {
       grid[i].push('e');
+      userGrid[i].push(null);
     }
   }
   SHIPS.forEach(shipItem => {
@@ -36,6 +39,6 @@ export function fetchGrid() {
   });
   return {
     type: INIT_GRID,
-    payload: grid
+    payload: { grid, userGrid }
   };
-};
+}
