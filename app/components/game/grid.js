@@ -1,50 +1,69 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
+
+import * as actions from '../../actions';
 
 import gridStyles from '../../styles/grid.scss';
 
 class Grid extends Component {
-  renderRow(row, idx) {
-    const cols = row.map(col => {
-      return (<div className={gridStyles.cell}>{col.substring(0, 1)}</div>);
-    });
-    cols.unshift(<div className={`${gridStyles.cell} ${gridStyles.header}`}>{idx}</div>);
-    return cols;
+  constructor(props) {
+    super(props);
+    this.handleTurn = this.handleTurn.bind(this);
   }
-  renderHeaderX(cols) {
-    const header = cols.map((col, idx) => {
-      return(<div key={idx} className={gridStyles.cell}>{idx}</div>);
+  handleTurn(rowIdx, colIdx, e) {
+      //Adjust indeces to account for headers
+      console.log(rowIdx, colIdx);
+      this.props.makeTurn(rowIdx, colIdx);
+  }
+  /*
+  const turn = {
+    player: 'A',
+    isHit: false,
+    character: '&#8226;'
+  };
+  */
+  renderRow(row, rowIdx) {
+    return row.map((col, idx) => {
+      if (rowIdx === 0) {
+        if (idx === 0) {
+          return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}></div>);
+        }
+        return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}>{idx-1}</div>);
+      }
+      else if (idx === 0) {
+        return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}>{rowIdx-1}</div>);
+      }
+      console.log(col, col && String.fromCharCode(col.character));
+      return (
+        <div key={idx} className={gridStyles.cell}
+          onClick={(e) => this.handleTurn(rowIdx, idx, e)}>
+          {col?String.fromCharCode(col.character):''}
+        </div>
+      );
     });
-    header.unshift(<div className={gridStyles.cell}></div>);
-    return header;
   }
   renderGrid() {
-    const rows = this.props.grid.map((cols, idx) => {
+    return this.props.grid.map((cols, idx) => {
       return (
         <div key={idx} className={gridStyles.row}>
           {this.renderRow(cols, idx)}
         </div>
       );
     });
-    rows.unshift(
-      <div className={`${gridStyles.row} ${gridStyles.header}`}>
-        {this.renderHeaderX(this.props.grid[0])}
-      </div>
-    );
-    return rows;
   }
   render() {
     return (
       <div>
-      {this.props.grid.length && this.renderGrid()}
+      {this.props.grid && this.renderGrid()}
       </div>
     );
   }
 }
 
-Grid.propTypes = {
-  grid: PropTypes.array,
-};
+function mapStateToProps(state) {
+  return { grid: state.battleshipReducer.userGrid };
+}
 
-export default Grid;
+export default connect(mapStateToProps, actions)(Grid);

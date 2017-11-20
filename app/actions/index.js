@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { browserHistory } from 'react-router';
 
-import { INIT_GRID } from './types';
+import { INIT_GRID, MAKE_TURN } from './types';
 
 //the following should be generated on the server for multiplayer/multidevice game
 const SYMBOLS = {
@@ -23,22 +23,73 @@ const SHIPS = [
 export function fetchGrid() {
   const grid = [];
   const userGrid = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i <= 10; i++) {
     grid[i] = [];
-    userGrid = [];
-    for (let j = 0; j < 10; j++) {
-      grid[i].push('e');
+    userGrid[i] = [];
+    for (let j = 0; j <= 10; j++) {
+      grid[i].push(null);
       userGrid[i].push(null);
     }
   }
   SHIPS.forEach(shipItem => {
     const { ship, positions } = shipItem;
     positions.forEach(cords => {
-      grid[cords[0]][cords[1]] = ship;
+      grid[cords[0]+1][cords[1]+1] = ship;
     });
   });
   return {
     type: INIT_GRID,
     payload: { grid, userGrid }
   };
+}
+
+const HIT_CHARACTER = 10005;
+const MISS_CHARACTER = 8226;
+
+function isValidTurn(grid, userGrid, rowIdx, colIdx) {
+  if (userGrid[rowIdx][colIdx]) {
+    //set error message
+    //Oops, you alredy made this turn
+    return false;
+  }
+  return true;
+}
+
+export function makeTurn(rowIdx, colIdx) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { grid, userGrid } = state.battleshipReducer;
+    if (isValidTurn(grid, userGrid, rowIdx, colIdx)) {
+      let turn = {
+        player: 'A',
+      };
+      if (grid[rowIdx][colIdx]) {
+        console.log(`it's a hit`);
+        turn = {
+          ...turn,
+          isHit: true,
+          character: HIT_CHARACTER,
+        };
+      }
+      else {
+        console.log(`it's a miss`);
+        turn = {
+          ...turn,
+          isHit: false,
+          character: MISS_CHARACTER,
+        };
+      }
+      //adjusting for headers
+      //userGrid[rowIdx+1][colIdx+1] = turn;
+      dispatch({
+        type: MAKE_TURN,
+        payload: {
+          turn,
+          rowIdx,
+          colIdx,
+        }
+      });
+    }
+  }
+
 }

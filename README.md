@@ -28,3 +28,19 @@ Please use React for the implementation. You may feel free to use Redux, LESS, o
   ]
 }
 ```
+
+```js
+const turn = {
+  player: 'A',
+  isHit: false,
+  character: '&#8226;'
+};
+
+const turn = {
+  player: 'A',
+  isHit: true,
+  character: '&#10005;'
+}
+
+
+```
