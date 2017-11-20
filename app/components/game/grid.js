@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 
 import * as actions from '../../actions';
@@ -12,18 +12,13 @@ class Grid extends Component {
     super(props);
     this.handleTurn = this.handleTurn.bind(this);
   }
+  componentWillMount() {
+    this.props.fetchGrid();
+  }
   handleTurn(rowIdx, colIdx, e) {
-      //Adjust indeces to account for headers
       console.log(rowIdx, colIdx);
       this.props.makeTurn(rowIdx, colIdx);
   }
-  /*
-  const turn = {
-    player: 'A',
-    isHit: false,
-    character: '&#8226;'
-  };
-  */
   renderRow(row, rowIdx) {
     return row.map((col, idx) => {
       if (rowIdx === 0) {
@@ -35,11 +30,11 @@ class Grid extends Component {
       else if (idx === 0) {
         return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}>{rowIdx-1}</div>);
       }
-      console.log(col, col && String.fromCharCode(col.character));
+      console.log(gridStyles.done, col && col.done ? gridStyles.done:'');
       return (
-        <div key={idx} className={gridStyles.cell}
+        <div key={idx} className={cx(gridStyles.cell, col && col.done ? gridStyles.done:'')}
           onClick={(e) => this.handleTurn(rowIdx, idx, e)}>
-          {col?String.fromCharCode(col.character):''}
+          {col ? String.fromCharCode(col.character) : ''}
         </div>
       );
     });

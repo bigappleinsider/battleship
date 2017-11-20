@@ -3,17 +3,12 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 import Grid from './grid';
+//import Info from './info';
+
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
-    this.handleTurn = this.handleTurn.bind(this);
-  }
-  componentWillMount() {
-    this.props.fetchGrid();
-  }
-  handleTurn(rowIdx, colIdx) {
-    this.props.makeTurn(rowIdx, colIdx);
   }
   render() {
     return (

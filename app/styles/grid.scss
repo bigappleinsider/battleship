@@ -8,6 +8,13 @@
     min-width: 30px;
     min-height: 30px;
   }
+  .done {
+    border: 3px solid blue;
+    margin: -2px;
+    border-radius: 7px;
+    color: blue;
+    z-index: 9999;
+  }
 }
 .header{
   font-weight: bold;
