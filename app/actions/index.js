@@ -27,7 +27,8 @@ export function fetchGrid() {
     const { ship, positions } = shipItem;
     positions.forEach(cords => {
       //Adjust indeces to account for headers
-      grid[cords[0]+1][cords[1]+1] = shipIdx;
+      grid[cords[0]+1][cords[1]+1] = { shipId: shipIdx, hasShip: true };
+      //console.log(cords[0], cords[1], grid[cords[0]+1][cords[1]+1])
     });
   });
   return {
@@ -68,7 +69,7 @@ const markIfSunk = (ship, userGrid) => {
     });
     return {
       type: MARK_AS_SUNK,
-      payload: updatedGrid
+      payload: { userGrid: updatedGrid }
     };
 }
 
@@ -78,27 +79,30 @@ export function makeTurn(rowIdx, colIdx) {
     const { grid, userGrid, ships } = state.battleshipReducer;
 
     if (isValidTurn(grid, userGrid, rowIdx, colIdx)) {
-      let turn = {
-        player: 'A',
-      };
-      const shipId = grid[rowIdx][colIdx];
-      if (shipId) {
+      let turn = {};
+      const shipId = grid[rowIdx][colIdx] ? grid[rowIdx][colIdx].shipId : null;
+      console.log(rowIdx, colIdx, grid[rowIdx][colIdx]);
+      if (grid[rowIdx][colIdx] && grid[rowIdx][colIdx].hasShip) {
         //console.log(`it's a hit`);
         turn = {
-          ...turn,
+          ...userGrid[rowIdx][colIdx],
           isHit: true,
           character: HIT_CHARACTER,
         };
 
         if (ships[shipId].hitCount+1 === ships[shipId].positions.length) {
           dispatch(markIfSunk(ships[shipId], userGrid));
+          turn = {
+            ...turn,
+            done: true
+          };
         }
         dispatch(updateHitCount(shipId));
       }
       else {
         //console.log(`it's a miss`);
         turn = {
-          ...turn,
+          ...userGrid[rowIdx][colIdx],
           isHit: false,
           character: MISS_CHARACTER,
         };

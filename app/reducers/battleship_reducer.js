@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   grid: [],
   userGrid: [],
   ships: [],
+  sunkCount: 0,
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -24,7 +25,8 @@ export default function(state = INITIAL_STATE, action) {
     case MARK_AS_SUNK:
       return {
         ...state,
-        userGrid: action.payload
+        userGrid: action.payload.userGrid,
+        sunkCount: state.sunkCount + 1
       };
 
     case MAKE_TURN:

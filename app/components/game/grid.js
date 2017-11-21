@@ -16,21 +16,19 @@ class Grid extends Component {
     this.props.fetchGrid();
   }
   handleTurn(rowIdx, colIdx, e) {
-      console.log(rowIdx, colIdx);
       this.props.makeTurn(rowIdx, colIdx);
   }
   renderRow(row, rowIdx) {
     return row.map((col, idx) => {
       if (rowIdx === 0) {
         if (idx === 0) {
-          return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}></div>);
+          return (<div key={idx} className={cx(gridStyles.cell, gridStyles.header)}></div>);
         }
-        return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}>{idx-1}</div>);
+        return (<div key={idx} className={cx(gridStyles.cell, gridStyles.header)}>{idx-1}</div>);
       }
       else if (idx === 0) {
-        return (<div key={idx} className={`${gridStyles.cell} ${gridStyles.header}`}>{rowIdx-1}</div>);
+        return (<div key={idx} className={cx(gridStyles.cell, gridStyles.header)}>{rowIdx-1}</div>);
       }
-      console.log(gridStyles.done, col && col.done ? gridStyles.done:'');
       return (
         <div key={idx} className={cx(gridStyles.cell, col && col.done ? gridStyles.done:'')}
           onClick={(e) => this.handleTurn(rowIdx, idx, e)}>
@@ -49,16 +47,28 @@ class Grid extends Component {
     });
   }
   render() {
+    const isGameOver = this.props.ships && this.props.sunkCount === this.props.ships.length;
     return (
       <div>
-      {this.props.grid && this.renderGrid()}
+        { isGameOver &&
+          <h3 className={gridStyles.gameOver}>
+          Game Over
+          </h3>
+        }
+        <div className={cx(gridStyles.grid, isGameOver ? gridStyles.gridGameOver : '')}>
+        {this.props.grid && this.renderGrid()}
+        </div>
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  return { grid: state.battleshipReducer.userGrid };
+  return {
+    grid: state.battleshipReducer.userGrid,
+    sunkCount: state.battleshipReducer.sunkCount,
+    ships: state.battleshipReducer.ships,
+  };
 }
 
 export default connect(mapStateToProps, actions)(Grid);
