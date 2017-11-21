@@ -1,14 +1,25 @@
 .grid {
-
+  max-width: 960px;
 }
 .gameOver {
   color: red;
+  opacity:1;
+  transition:opacity 1s linear;
 }
 .gridGameOver {
   opacity: 0.3;
 }
+.gridHeader {
+  display: flex;
+  flex-direction: row;
+  button {
+    height: 30px;
+    align-self: center;
+  }
+}
 .row {
   display: flex;
+  flex-wrap: wrap;
   .cell {
     border: 1px solid grey;
     justify-content: center;
@@ -16,6 +27,8 @@
     display: flex;
     min-width: 30px;
     min-height: 30px;
+    width: 3vw;
+    height: 3vw;
   }
   .done {
     border: 3px solid blue;

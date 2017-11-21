@@ -6,7 +6,6 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        <h3>Battleship</h3>
         <Grid />
       </div>
     );

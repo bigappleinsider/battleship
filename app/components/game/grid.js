@@ -11,8 +11,12 @@ class Grid extends Component {
   constructor(props) {
     super(props);
     this.handleTurn = this.handleTurn.bind(this);
+    this.handleReset = this.handleReset.bind(this);
   }
   componentWillMount() {
+    this.props.fetchGrid();
+  }
+  handleReset() {
     this.props.fetchGrid();
   }
   handleTurn(rowIdx, colIdx, e) {
@@ -49,7 +53,11 @@ class Grid extends Component {
   render() {
     const isGameOver = this.props.ships && this.props.sunkCount === this.props.ships.length;
     return (
-      <div>
+      <div className={gridStyles.grid}>
+        <div className={gridStyles.gridHeader}>
+          <h3>Battleship</h3>
+          <button onClick={this.handleReset}>Reset</button>
+        </div>
         { isGameOver &&
           <h3 className={gridStyles.gameOver}>
           Game Over

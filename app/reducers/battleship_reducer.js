@@ -10,7 +10,7 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case INIT_GRID:
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload, sunkCount: 0 };
     case UPDATE_HIT_COUNT:
       const { shipId } = action.payload;
       return {
