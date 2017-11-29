@@ -2,17 +2,20 @@ import axios from 'axios';
 
 import { browserHistory } from 'react-router';
 
-import { INIT_GRID, MAKE_TURN, UPDATE_HIT_COUNT, MARK_AS_SUNK } from './types';
+import Socket from '../sockets';
 
-//the following should be generated on the server for multiplayer/multidevice game
-const SHIPS = [
-    { "ship": "carrier", "hitCount": 0, "positions": [[2,9], [3,9], [4,9], [5,9], [6,9]] },
-    { "ship": "battleship", "hitCount": 0, "positions": [[5,2], [5,3], [5,4], [5,5]] },
-    { "ship": "cruiser", "hitCount": 0, "positions": [[8,1], [8,2], [8,3]] },
-    { "ship": "submarine", "hitCount": 0, "positions": [[3,0], [3,1], [3,2]] },
-    { "ship": "destroyer", "hitCount": 0, "positions": [[0,0], [1,0]] },
-];
-export function fetchGrid() {
+import {
+  INIT_GRID,
+  MAKE_TURN,
+  UPDATE_HIT_COUNT,
+  MARK_AS_SUNK,
+  TOGGLE_ACTIVE_TURN
+} from './types';
+
+const HIT_CHARACTER = 10005;
+const MISS_CHARACTER = 8226;
+
+export function fetchGrid(data) {
   const grid = [];
   const userGrid = [];
   for (let i = 0; i <= 10; i++) {
@@ -23,22 +26,23 @@ export function fetchGrid() {
       userGrid[i].push(null);
     }
   }
-  SHIPS.forEach((shipItem, shipIdx) => {
+  data.ships.forEach((shipItem, shipIdx) => {
     const { ship, positions } = shipItem;
     positions.forEach(cords => {
       //Adjust indeces to account for headers
       grid[cords[0]+1][cords[1]+1] = { shipId: shipIdx, hasShip: true };
-      //console.log(cords[0], cords[1], grid[cords[0]+1][cords[1]+1])
     });
   });
   return {
     type: INIT_GRID,
-    payload: { grid, userGrid, ships: SHIPS }
+    payload: {
+      grid,
+      userGrid,
+      ships: data.ships
+    }
   };
 }
 
-const HIT_CHARACTER = 10005;
-const MISS_CHARACTER = 8226;
 
 function isValidTurn(grid, userGrid, rowIdx, colIdx) {
   if (userGrid[rowIdx][colIdx]) {
@@ -73,12 +77,26 @@ const markIfSunk = (ship, userGrid) => {
     };
 }
 
-export function makeTurn(rowIdx, colIdx) {
+export function toggleActiveTurn() {
+  return (dispatch, getState) => {
+      const state = getState();
+
+      console.log('toggleActiveTurn action');
+      dispatch({
+        type: TOGGLE_ACTIVE_TURN
+      })
+  }
+}
+
+export function makeTurn(rowIdx, colIdx, roomId) {
   return (dispatch, getState) => {
     const state = getState();
     const { grid, userGrid, ships } = state.battleshipReducer;
 
     if (isValidTurn(grid, userGrid, rowIdx, colIdx)) {
+      Socket.emit('makeTurn', { roomId });
+      console.log('makeTurn');
+      dispatch(toggleActiveTurn());
       let turn = {};
       const shipId = grid[rowIdx][colIdx] ? grid[rowIdx][colIdx].shipId : null;
       console.log(rowIdx, colIdx, grid[rowIdx][colIdx]);

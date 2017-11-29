@@ -1,8 +1,10 @@
 var webpack = require('webpack');
 var WebpackDevServer = require('webpack-dev-server');
 var config = require('./webpack.config');
+const SocketManager = require('./server/SocketManager')
 
-new WebpackDevServer(webpack(config), {
+
+var app = new WebpackDevServer(webpack(config), {
     publicPath: config.output.publicPath,
     hot: true,
     historyApiFallback: true,
@@ -21,10 +23,29 @@ new WebpackDevServer(webpack(config), {
       chunks: false,
       chunkModules: false
     }
-}).listen(3000, 'localhost', function (err) {
+});
+
+
+
+/*
+var server = app.listen(8080);
+var io = require('socket.io').listen(server);
+*/
+
+var server = app.listen(3000, 'localhost', function (err) {
     if (err) {
         console.log(err);
     }
 
   console.log('Listening at localhost:3000');
 });
+
+/*
+require('./consumer.js)(io);
+*/
+
+
+var io = module.exports.io = require('socket.io').listen(3100);
+
+io.on('connection', SocketManager;
+//module.exports.io = io;

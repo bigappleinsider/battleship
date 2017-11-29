@@ -1,16 +1,33 @@
-import { INIT_GRID, MAKE_TURN, UPDATE_HIT_COUNT, MARK_AS_SUNK } from '../actions/types';
+import {
+  INIT_GRID,
+  MAKE_TURN,
+  UPDATE_HIT_COUNT,
+  MARK_AS_SUNK,
+  TOGGLE_ACTIVE_TURN
+} from '../actions/types';
 
 const INITIAL_STATE = {
   grid: [],
   userGrid: [],
   ships: [],
   sunkCount: 0,
+  channel: null,
+  myTurn: false
 };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case INIT_GRID:
-      return { ...state, ...action.payload, sunkCount: 0 };
+      return {
+        ...state,
+        ...action.payload,
+        sunkCount: 0
+      };
+    case TOGGLE_ACTIVE_TURN:
+      return {
+          ...state,
+          myTurn: !state.myTurn
+      };
     case UPDATE_HIT_COUNT:
       const { shipId } = action.payload;
       return {
