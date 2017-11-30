@@ -193,7 +193,7 @@ class Grid extends Component {
           }
           {error && <Snackbar open={true} message={error} /> }
         </div>
-        { isGameOver &&
+        { isGameOver && gameStart &&
           <h3 className={gridStyles.gameOver}>
           Game Over
           </h3>
