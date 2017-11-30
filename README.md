@@ -1,5 +1,15 @@
 ### Design and implement a (partial) Battleship game as a web app.
 
+![Screenshot 1](https://raw.githubusercontent.com/bigappleinsider/battleship/master/screenshots/Screenshot_1.png)
+![Screenshot 2](https://raw.githubusercontent.com/bigappleinsider/battleship/master/screenshots/Screenshot_2.png)
+![Screenshot 3](https://raw.githubusercontent.com/bigappleinsider/battleship/master/screenshots/Screenshot_3.png)
+![Screenshot 4](https://raw.githubusercontent.com/bigappleinsider/battleship/master/screenshots/Screenshot_4.png)
+![Screenshot 5](https://raw.githubusercontent.com/bigappleinsider/battleship/master/screenshots/Screenshot_5.png)
+![Screenshot 6](https://raw.githubusercontent.com/bigappleinsider/battleship/master/screenshots/Screenshot_6.png)
+
+
+
+
 [Battleship wikipedia](https://en.wikipedia.org/wiki/Battleship_game)
 
 In Battleship, the computer has positioned five ships of various sizes on a 10x10 board. Each ship must be placed horizontally or vertically, completely on the board, without overlapping another ship. The player cannot see the ship locations. Each round, the player “fires” at a board position of his choosing. The computer indicates if this was a “hit” or a “miss”. When all tiles of a particular ship have been hit, the computer indicates that the entire ship has been sunk. When the player has sunk all of the ships, the game is over.
