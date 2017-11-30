@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import reduxThunk from 'redux-thunk';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { browserHistory } from 'react-router';
 import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
