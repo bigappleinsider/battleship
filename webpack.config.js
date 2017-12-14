@@ -16,6 +16,15 @@ module.exports = {
     publicPath: '/'
   },
 
+  resolve: {
+        root: [
+            path.resolve(__dirname  + '/src')
+        ],
+        alias: {
+            '~src': path.resolve(__dirname  + '/src')
+        }
+    },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.tpl.html',
@@ -60,5 +69,14 @@ module.exports = {
       test: /\.(ttf|eot|svg)(\?[a-z0-9#=&.]+)?$/,
       loader: 'file'
     }]
-  }
+  },
+  externals: [
+      {
+        'Config': JSON.stringify(process.env.ENV === 'production' ? {
+          serverUrl: process.env.serverUrl
+        } : {
+          serverUrl: "https://cfassignment.herokuapp.com",
+          name: "vlad"
+        })
+      }]
 };

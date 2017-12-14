@@ -3,7 +3,8 @@ import {
   MAKE_TURN,
   UPDATE_HIT_COUNT,
   MARK_AS_SUNK,
-  TOGGLE_ACTIVE_TURN
+  TOGGLE_ACTIVE_TURN,
+  UPDATE_OPPONENT_HIT_COUNT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -12,7 +13,9 @@ const INITIAL_STATE = {
   ships: [],
   sunkCount: 0,
   channel: null,
-  myTurn: false
+  myTurn: false,
+  hitCount: 0,
+  opponentHitCount: 0
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -22,6 +25,11 @@ export default function(state = INITIAL_STATE, action) {
         ...state,
         ...action.payload,
         sunkCount: 0
+      };
+    case UPDATE_OPPONENT_HIT_COUNT:
+      return {
+        ...state,
+        opponentHitCount: action.payload
       };
     case TOGGLE_ACTIVE_TURN:
       return {
@@ -36,7 +44,8 @@ export default function(state = INITIAL_STATE, action) {
           ...state.ships.slice(0, shipId),
           { ...state.ships[shipId], hitCount: state.ships[shipId].hitCount + 1 },
           ...state.ships.slice(shipId+1),
-        ]
+        ],
+        hitCount: state.hitCount+1
       };
 
     case MARK_AS_SUNK:

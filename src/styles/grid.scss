@@ -1,5 +1,14 @@
+.gameWrapper {
+  display: flex;
+}
+.orange {
+  border: 3px solid rgb(255,176,0);
+}
+.green {
+  border: 3px solid rgb(37,183,159);
+}
 .grid {
-  max-width: 960px;
+  width: 696px;
 }
 .gameOver {
   color: red;
@@ -19,7 +28,6 @@
 }
 .row {
   display: flex;
-  flex-wrap: wrap;
   .cell {
     border: 1px solid grey;
     justify-content: center;
@@ -27,8 +35,11 @@
     display: flex;
     min-width: 30px;
     min-height: 30px;
-    width: 3vw;
-    height: 3vw;
+    width: 60px;
+    height: 60px;
+  }
+  .cell img {
+    max-width: 100%;
   }
   .done {
     border: 3px solid blue;

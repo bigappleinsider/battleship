@@ -84,7 +84,11 @@ io.on('connection', (socket) => {
     //need to send in roomid
     console.log('makeTurn');
     socket.broadcast.to(data.roomId).emit('turnChange', data);
-  })
+  });
+  socket.on('hit', function(data) {
+    socket.broadcast.to(data.roomId).emit('updateOpponentHitCount', data);
+  });
+
 
 
 

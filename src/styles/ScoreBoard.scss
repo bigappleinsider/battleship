@@ -1,0 +1,43 @@
+.player {
+  font-size: 36px;
+  font-weight: bold;
+  color: rgb(74,74,74);
+  width: 600px;
+  display: flex;
+}
+.player > div {
+  flex: 1 0;
+}
+
+.scoreWrapper > div {
+  display: flex;
+  justify-content: center;
+}
+
+.orange {
+  background: rgb(255,176,0);
+  height: 150px;
+}
+
+.green {
+  background: rgb(37,183,159);
+  height: 150px;
+}
+
+.score {
+  border-bottom: 1px solid rgb(74,74,74);
+  padding: 10px;
+  margin: 10px;
+}
+
+.name {
+  margin: 10px;
+}
+
+.battleInfo img {
+  width: 96px;
+}
+img.zone {
+  width: 16px;
+  height: 16px;
+}

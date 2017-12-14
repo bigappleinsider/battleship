@@ -9,11 +9,11 @@ import {
   MAKE_TURN,
   UPDATE_HIT_COUNT,
   MARK_AS_SUNK,
-  TOGGLE_ACTIVE_TURN
+  TOGGLE_ACTIVE_TURN,
+  UPDATE_OPPONENT_HIT_COUNT,
 } from './types';
 
-const HIT_CHARACTER = 10005;
-const MISS_CHARACTER = 8226;
+import { HIT_CHARACTER, MISS_CHARACTER } from '../constants';
 
 export function fetchGrid(data) {
   const grid = [];
@@ -53,10 +53,16 @@ function isValidTurn(grid, userGrid, rowIdx, colIdx) {
   return true;
 }
 
-const updateHitCount = (shipId) => {
-  return {
-    type: UPDATE_HIT_COUNT,
-    payload: { shipId }
+const updateHitCount = (shipId, roomId) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const { hitCount } = state.battleshipReducer;
+    Socket.emit('hit', { roomId, hitCount: hitCount+1 });
+
+    dispatch({
+      type: UPDATE_HIT_COUNT,
+      payload: { shipId }
+    });
   }
 }
 
@@ -88,20 +94,28 @@ export function toggleActiveTurn() {
   }
 }
 
+export function updateOpponentHitCount(hitCount) {
+  return (dispatch) => {
+    dispatch({
+      type: UPDATE_OPPONENT_HIT_COUNT,
+      payload: hitCount
+    });
+  };
+}
+
+
 export function makeTurn(rowIdx, colIdx, roomId) {
   return (dispatch, getState) => {
     const state = getState();
-    const { grid, userGrid, ships } = state.battleshipReducer;
-
+    const { grid, userGrid, ships, hitCount } = state.battleshipReducer;
     if (isValidTurn(grid, userGrid, rowIdx, colIdx)) {
-      Socket.emit('makeTurn', { roomId });
-      console.log('makeTurn');
       dispatch(toggleActiveTurn());
       let turn = {};
       const shipId = grid[rowIdx][colIdx] ? grid[rowIdx][colIdx].shipId : null;
       console.log(rowIdx, colIdx, grid[rowIdx][colIdx]);
       if (grid[rowIdx][colIdx] && grid[rowIdx][colIdx].hasShip) {
         //console.log(`it's a hit`);
+
         turn = {
           ...userGrid[rowIdx][colIdx],
           isHit: true,
@@ -115,9 +129,8 @@ export function makeTurn(rowIdx, colIdx, roomId) {
             done: true
           };
         }
-        dispatch(updateHitCount(shipId));
-      }
-      else {
+        dispatch(updateHitCount(shipId, roomId));
+      } else {
         //console.log(`it's a miss`);
         turn = {
           ...userGrid[rowIdx][colIdx],
@@ -125,6 +138,8 @@ export function makeTurn(rowIdx, colIdx, roomId) {
           character: MISS_CHARACTER,
         };
       }
+      Socket.emit('makeTurn', { roomId });
+
 
       dispatch({
         type: MAKE_TURN,

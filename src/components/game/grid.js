@@ -8,11 +8,15 @@ import * as actions from '../../actions';
 
 import gridStyles from '../../styles/grid.scss';
 
-import { USER_CONNECTED } from '../../constants/';
+import { USER_CONNECTED, HIT_CHARACTER, MISS_CHARACTER } from '../../constants/';
 
 import RoomForm from './room_form';
+import ScoreBoard from './ScoreBoard';
 
 import { Snackbar } from 'material-ui';
+
+import hitImage from '../../assets/hit.png';
+import missImage from '../../assets/miss.png';
 
 
 //var io = require('socket.io-client')
@@ -39,6 +43,7 @@ class Grid extends Component {
   componentWillMount() {
 
     Socket.on('newGameCreated', (data) => {
+      console.log('Player 1: mySocketId', data.mySocketId);
       this.setState({
         roomCreated: data.roomId
       });
@@ -54,9 +59,17 @@ class Grid extends Component {
       }
     });
 
+    Socket.on('updateOpponentHitCount', (data) => {
+      this.props.updateOpponentHitCount(data.hitCount);
+    });
+
     Socket.on('turnChange', (data) => {
-      console.log('turnChange');
+      console.log('turnChange', data);
       this.props.toggleActiveTurn();
+      /*
+      if(data.hitCount) {
+        this.props.updateOpponentHitCount(data.hitCount);
+      }*/
       //this.setState({ myTurn: data.myTurn });
     });
 
@@ -159,7 +172,8 @@ class Grid extends Component {
       return (
         <div key={idx} className={cx(gridStyles.cell, col && col.done ? gridStyles.done:'')}
           onClick={(e) => this.handleTurn(rowIdx, idx, e)}>
-          {col ? String.fromCharCode(col.character) : ''}
+          { col && col.character === HIT_CHARACTER && <img src={hitImage} alt="hit" />}
+          { col && col.character === MISS_CHARACTER && <img src={missImage} alt="miss" />}
         </div>
       );
     });
@@ -178,7 +192,12 @@ class Grid extends Component {
 
     const isGameOver = this.props.ships && this.props.sunkCount === this.props.ships.length;
     const { roomCreated, roomId, playerJoinedModals, gameStart, error } = this.state;
+    const colorA = roomCreated?'orange':'green';
+    const colorB = !roomCreated?'orange':'green';
+    const activeColor = this.props.myTurn?gridStyles[colorA]:gridStyles[colorB];
     return (
+      <div className={gridStyles.gameWrapper}>
+        {gameStart && <ScoreBoard isHost={roomCreated} ships={this.props.ships} hitCount={this.props.hitCount} opponentHitCount={this.props.opponentHitCount} />}
       <div className={gridStyles.grid}>
         <div className={gridStyles.gridHeader}>
           {!gameStart &&
@@ -198,21 +217,14 @@ class Grid extends Component {
           Game Over
           </h3>
         }
-        <div className={cx(gridStyles.grid, isGameOver ? gridStyles.gridGameOver : '')}>
+        <div className={cx(gridStyles.grid, activeColor, isGameOver ? gridStyles.gridGameOver : '')}>
         {this.props.userGrid && this.renderGrid()}
         </div>
+      </div>
       </div>
     );
   }
 }
-
-/*
-grid: state.battleshipReducer.userGrid,
-sunkCount: state.battleshipReducer.sunkCount,
-ships: state.battleshipReducer.ships,
-name: state.battleshipReducer.name,
-channel
-*/
 
 function mapStateToProps(state) {
   return {

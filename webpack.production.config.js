@@ -15,6 +15,14 @@ module.exports = {
     filename: '[name]-[hash].js',
     publicPath: '/'
   },
+  resolve: {
+        root: [
+            path.resolve(__dirname  + '/src')
+        ],
+        alias: {
+            '~src': path.resolve(__dirname  + '/src')
+        }
+  },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new HtmlWebpackPlugin({
@@ -71,6 +79,15 @@ module.exports = {
         loader: 'file'
     }]
   },
+  externals: [
+      {
+        'Config': JSON.stringify(process.env.ENV === 'production' ? {
+          serverUrl: process.env.serverUrl
+        } : {
+          serverUrl: "https://cfassignment.herokuapp.com",
+          name: "vlad"
+        })
+    }],
   postcss: [
     require('autoprefixer')
   ]
