@@ -1,3 +1,4 @@
+
 .gameWrapper {
   display: flex;
 }
@@ -51,4 +52,18 @@
 }
 .header{
   font-weight: bold;
+}
+@media screen and (max-width:1260px){
+  .gameWrapper {
+    flex-direction: column;
+  }
+}
+@media screen and (max-width:720px){
+  .grid {
+    width: 400px;
+  }
+  .cell {
+    width: 45px!important;
+    height: 45px!important;
+  }
 }

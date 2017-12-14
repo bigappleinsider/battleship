@@ -1,3 +1,5 @@
+
+
 .player {
   font-size: 36px;
   font-weight: bold;
@@ -6,7 +8,7 @@
   display: flex;
 }
 .player > div {
-  flex: 1 0;
+  flex: 1 1;
 }
 
 .scoreWrapper > div {
@@ -40,4 +42,19 @@
 img.zone {
   width: 16px;
   height: 16px;
+}
+
+@media screen and (max-width:1260px){
+  .player {
+    order: 2;
+  }
+}
+@media screen and (max-width:720px){
+  .player {
+    width: 400px;
+    font-size: 18px;
+  }
+  .battleInfo {
+    flex-grow: 2!important;
+  }
 }
