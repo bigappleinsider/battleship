@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import cx from 'classnames';
-import Socket from '../../sockets';
 import PropTypes from 'prop-types';
 
-import * as actions from '../../actions';
+import Socket from '~src/sockets';
+import * as actions from '~src/actions';
+import gridStyles from '~src/styles/grid.scss';
 
-import gridStyles from '../../styles/grid.scss';
+import { USER_CONNECTED, HIT_CHARACTER, MISS_CHARACTER } from '~src/constants/';
 
-import { USER_CONNECTED, HIT_CHARACTER, MISS_CHARACTER } from '../../constants/';
-
-import RoomForm from './room_form';
+import RoomForm from './RoomForm';
 import ScoreBoard from './ScoreBoard';
 
 import { Snackbar } from 'material-ui';
 
-import hitImage from '../../assets/hit.png';
-import missImage from '../../assets/miss.png';
-
-
-//var io = require('socket.io-client')
+import hitImage from '~src/assets/hit.png';
+import missImage from '~src/assets/miss.png';
 
 class Grid extends Component {
   constructor(props) {
@@ -64,13 +60,7 @@ class Grid extends Component {
     });
 
     Socket.on('turnChange', (data) => {
-      console.log('turnChange', data);
       this.props.toggleActiveTurn();
-      /*
-      if(data.hitCount) {
-        this.props.updateOpponentHitCount(data.hitCount);
-      }*/
-      //this.setState({ myTurn: data.myTurn });
     });
 
     Socket.on('gameStartedByHost', (data) => {
@@ -82,16 +72,12 @@ class Grid extends Component {
       this.props.fetchGrid(data);
     });
 
-
     Socket.on('playerJoined', (data) => {
       this.setState({
         roomId: data.roomId,
         playerJoinedModals: true
       });
     });
-    //   this.props.fetchGrid(data);
-    //   this.props.toggleActiveTurn();
-
   }
   createGame(e) {
     e.preventDefault();

@@ -1,2 +1,2 @@
-var io = require('socket.io-client')
-module.exports = io();
+import io from 'socket.io-client';
+export default io();

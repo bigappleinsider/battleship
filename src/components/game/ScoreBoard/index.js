@@ -1,33 +1,28 @@
+import PropTypes from 'prop-types';
 import React from 'react';
-
 import cx from 'classnames';
 
-import s from '~src/styles/ScoreBoard.scss';
-
+import ScoreHolder from './ScoreHolder';
+import s from './ScoreBoard.scss';
 import * as icons from '~src/assets/ships';
-
 import * as infoIcons from '~src/assets/infoIcons';
 
 const ScoreBoard = ({ ships, hitCount, opponentHitCount, isHost }) => {
   return (
     <div className={s['player']}>
-      <div className={cx(s['orange'], s['scoreWrapper'])}>
-        <div className={s['score']}>
-          {isHost?hitCount:opponentHitCount}
-        </div>
-        <div className={s['name']}>
-          player 1
-        </div>
-      </div>
 
-      <div className={cx(s['green'], s['scoreWrapper'])}>
-        <div className={s['score']}>
-        {isHost?opponentHitCount:hitCount}
-        </div>
-        <div className={s['name']}>
-        player 2
-        </div>
-      </div>
+      <ScoreHolder
+        className={'orange'}
+        score={isHost?hitCount:opponentHitCount}
+        name={'player 1'}
+        />
+
+      <ScoreHolder
+        className={'green'}
+        score={isHost?opponentHitCount:hitCount}
+        name={'player 2'}
+        />
+
       <div className={s['battleInfo']}>
 
       {ships.map((ship) => {
@@ -52,5 +47,12 @@ const ScoreBoard = ({ ships, hitCount, opponentHitCount, isHost }) => {
     </div>
   );
 }
+
+ScoreBoard.propTypes = {
+  ships: PropTypes.array,
+  hitCount: PropTypes.number,
+  opponentHitCount: PropTypes.number,
+  isHost: PropTypes.string,
+};
 
 export default ScoreBoard;
